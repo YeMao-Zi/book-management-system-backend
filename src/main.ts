@@ -2,6 +2,8 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import { MapTestInterceptor } from './common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 import { join } from 'path';
 
 async function bootstrap() {
@@ -11,6 +13,8 @@ async function bootstrap() {
   // 注册全局管道，并将全局管道设置为transform: true，表示在处理请求参数时自动进行类型转换和验证
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useStaticAssets(join(__dirname, '../uploads'), { prefix: '/uploads' });
+  app.useGlobalInterceptors(new MapTestInterceptor());
+  app.useGlobalFilters(new HttpExceptionFilter());
   await app.listen(process.env.PORT ?? 3000);
 }
 void bootstrap();
