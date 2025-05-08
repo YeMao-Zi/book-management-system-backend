@@ -12,7 +12,7 @@ export class MapTestInterceptor implements NestInterceptor {
     const response = context.switchToHttp().getResponse();
     const statusCode = response.statusCode;
     return next.handle().pipe(
-      map((res) => {
+      map((res = {}) => {
         const { code, message, data } = res;
         return {
           code: code || statusCode,

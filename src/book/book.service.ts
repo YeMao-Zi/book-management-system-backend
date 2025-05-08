@@ -12,8 +12,11 @@ function randomNum() {
 export class BookService {
   @Inject(DbService)
   private readonly dbService: DbService;
-  async list() {
+  async list(name?: string) {
     const books: Book[] = await this.dbService.read();
+    if(name){
+      return books.filter((book) => book.name.includes(name));
+    }
     return books;
   }
   async findById(id: number) {
